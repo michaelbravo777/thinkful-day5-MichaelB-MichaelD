@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable no-undef */
 'use strict';
 
@@ -61,6 +60,7 @@ function handleNewItemSubmit() {
   });
 }
 
+
 function toggleCheckedForListItem(itemId) {
   console.log('Toggling checked property for item with id ' + itemId);
   const item = STORE.find(item => item.id === itemId);
@@ -83,17 +83,34 @@ function handleItemCheckClicked() {
   });
 }
 
-
-function handleDeleteItemClicked() {
-  // this function will be responsible for when users want to delete a shopping list
-  // item
-  console.log('`handleDeleteItemClicked` ran');
+//  Create function to delete item from the STORE list
+function deleteListItem(itemId) {
+  console.log(`Deleted ${itemId} from the list.`);
+  const selectedItem = STORE.findIndex(item => item.id === itemId);
+  // remove the
+  STORE.splice(selectedItem, 1);
 }
 
+
+
+// Function to handle when the user clickes on the 'Delete' button
+function handleDeleteItemClicked() {
+  // Same logic as 'handleItemCheckClicked. Use JQuery
+  $('.js-shopping-list').on('click', '.js-item-delete', event => {
+    // get the INDEX of the item from STORE
+    const itemIndex = getItemIdFromElement(event.currentTarget);
+    // call the previously created function to actually do the work of removing the item from STORE
+    // pass in the ItemIndex grabbed from right above.
+    deleteListItem(itemIndex);
+    // as with all 'clicky' or similar functions, this is an action so the shopping list must be Re Rendered
+    renderShoppingList();
+  });
+}
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
 // that handle new item submission and user clicks on the "check" and "delete" buttons
 // for individual shopping list items.
+
 function handleShoppingList() {
   renderShoppingList();
   handleNewItemSubmit();
